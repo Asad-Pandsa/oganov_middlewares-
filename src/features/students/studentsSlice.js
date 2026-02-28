@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchSenateMembersApi, fetchSenateMemberByIdApi } from "../../api/studentsApi.js";
+import { 
+    fetchSenateMembersApi, 
+    fetchSenateMemberByIdApi,
+    createStudentApi,        
+    updateStudentApi        
+} from "../../api/studentsApi.js";
 
 export const fetchSenateMembers = createAsyncThunk(
     "students/fetchAll", 
@@ -9,9 +14,25 @@ export const fetchSenateMembers = createAsyncThunk(
 );
 
 export const fetchSenateMemberById = createAsyncThunk(
-    "students/fetchById",  // Исправлено: "stusents" -> "students"
+    "students/fetchById",
     async (id) => {
         return await fetchSenateMemberByIdApi(id);
+    }
+);
+
+// Добавляем экшен для создания студента
+export const createStudent = createAsyncThunk(
+    "students/create",
+    async (studentData) => {
+        return studentData;
+    }
+);
+
+// Добавляем экшен для обновления студента
+export const updateStudent = createAsyncThunk(
+    "students/update",
+    async (studentData) => {
+        return studentData;
     }
 );
 
@@ -36,7 +57,7 @@ const studentsSlice = createSlice({
             }) 
             .addCase(fetchSenateMembers.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.items = action.payload;  // items для списка
+                state.items = action.payload;
             })
             .addCase(fetchSenateMembers.rejected, (state, action) => {
                 state.status = "failed";
@@ -49,11 +70,28 @@ const studentsSlice = createSlice({
             }) 
             .addCase(fetchSenateMemberById.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.selectedMember = action.payload;  // selectedMember для деталей
+                state.selectedMember = action.payload;
             })
             .addCase(fetchSenateMemberById.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message;     
+            })
+            
+            // Добавляем обработку createStudent
+            .addCase(createStudent.fulfilled, (state, action) => {
+                state.items.push(action.payload);
+            })
+            
+            // Добавляем обработку updateStudent
+            .addCase(updateStudent.fulfilled, (state, action) => {
+                const index = state.items.findIndex(item => item.id === action.payload.id);
+                if (index !== -1) {
+                    state.items[index] = action.payload;
+                }
+                // Обновляем selectedMember если это тот же студент
+                if (state.selectedMember?.id === action.payload.id) {
+                    state.selectedMember = action.payload;
+                }
             });
     }
 }); 

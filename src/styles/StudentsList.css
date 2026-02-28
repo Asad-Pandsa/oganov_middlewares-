@@ -1,0 +1,19 @@
+.senate, .student-senate-name, .senate-form-title, .senate-form-title{
+    font-size: 40px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.senate-list {
+    list-style-type: none;
+    padding: 0;
+    font-size: 28px;
+}
+
+.age, .direction, .post, .description {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+
+

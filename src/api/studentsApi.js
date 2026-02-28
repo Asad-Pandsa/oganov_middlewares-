@@ -1,3 +1,5 @@
+// studentsApi.js
+
 const senateMembers = [
 
 {
@@ -56,6 +58,8 @@ const senateMembers = [
 
 ];
 
+// Создаем копию массива для мутаций (чтобы не изменять исходный массив)
+let mutableSenateMembers = [...senateMembers];
 
 // имитация задержки сервера
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -63,24 +67,84 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // Получить всех членов сената
 export const fetchSenateMembersApi = async () => {
     await delay(500);
-    return senateMembers;
+    return mutableSenateMembers;
 };
 
 // Получить одного члена сената по id
 export const fetchSenateMemberByIdApi = async (id) => {
     await delay(300);
-    return senateMembers.find(member => member.id === Number(id));
+    return mutableSenateMembers.find(member => member.id === Number(id));
 };
 
-//  Получить членов сената по должности
+// Получить членов сената по должности
 export const fetchSenateMembersByPostApi = async (post) => {
     await delay(400);
-    return senateMembers.filter(member => member.post.toLowerCase().includes(post.toLowerCase()));
+    return mutableSenateMembers.filter(member => member.post.toLowerCase().includes(post.toLowerCase()));
 };
 
-//  Получить членов сената по направлению обучения
+// Получить членов сената по направлению обучения
 export const fetchSenateMembersByDirectionApi = async (direction) => {
     await delay(400);
-    return senateMembers.filter(member => member.direction.toLowerCase().includes(direction.toLowerCase()));
+    return mutableSenateMembers.filter(member => member.direction.toLowerCase().includes(direction.toLowerCase()));
 };
 
+// ДОБАВЛЯЕМ НОВЫЕ ФУНКЦИИ:
+
+// Создать нового члена сената
+export const createStudentApi = async (studentData) => {
+    await delay(500);
+    
+    // Создаем нового члена с уникальным id
+    const newMember = {
+        ...studentData,
+        id: Math.max(...mutableSenateMembers.map(m => m.id), 0) + 1 // генерируем новый id
+    };
+    
+    // Добавляем в массив
+    mutableSenateMembers.push(newMember);
+    
+    return newMember;
+};
+
+// Обновить существующего члена сената
+export const updateStudentApi = async (studentData) => {
+    await delay(500);
+    
+    const index = mutableSenateMembers.findIndex(member => member.id === Number(studentData.id));
+    
+    if (index === -1) {
+        throw new Error("Студент не найден");
+    }
+    
+    // Обновляем данные
+    mutableSenateMembers[index] = {
+        ...mutableSenateMembers[index],
+        ...studentData,
+        id: Number(studentData.id) // убеждаемся, что id - число
+    };
+    
+    return mutableSenateMembers[index];
+};
+
+// Удалить члена сената (опционально, если понадобится)
+export const deleteStudentApi = async (id) => {
+    await delay(500);
+    
+    const index = mutableSenateMembers.findIndex(member => member.id === Number(id));
+    
+    if (index === -1) {
+        throw new Error("Студент не найден");
+    }
+    
+    const deletedMember = mutableSenateMembers[index];
+    mutableSenateMembers = mutableSenateMembers.filter(member => member.id !== Number(id));
+    
+    return deletedMember;
+};
+
+// Сбросить данные к исходным (для тестирования)
+export const resetToOriginalDataApi = async () => {
+    await delay(300);
+    mutableSenateMembers = [...senateMembers];
+    return mutableSenateMembers;
+};
