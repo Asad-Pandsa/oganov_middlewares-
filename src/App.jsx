@@ -7,6 +7,11 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import "./styles/theme.css";
 
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
+
+
+
 function App() {
   const theme = useSelector(state => state.ui.theme);
 
@@ -22,6 +27,8 @@ function App() {
       <Routes>
         <Route path="/" element={<StudentsList />} />
         <Route path="/student/:id" element={<StudentsDetail />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
 
       <Footer />
