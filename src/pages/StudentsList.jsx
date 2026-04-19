@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";  // Добавлен useState
 import { Link } from "react-router-dom";
-import { fetchSenateMembers, createStudent } from "../features/students/studentsSlice";  // Добавлен импорт createStudent
+import { fetchSenateMembers, createStudent } from "../features/students/studentsSlice";
+import { FaHeart, FaStar } from "react-icons/fa";
 import "../styles/studentsList.css"; 
 
 const StudentsList = () => {
@@ -95,13 +96,47 @@ const StudentsList = () => {
         <button type="submit">Добавить</button>
       </form>
 
-      <h1 className="senate">Сенаторы</h1>
+      {items.filter(s => s.isFavorite).length > 0 && (
+        <>
+          <h2 className="senate" style={{ marginTop: '40px', color: '#f39c12' }}>
+            <FaStar /> Избранное
+          </h2>
+          <ul className="senate-list">
+            {items.filter(s => s.isFavorite).map(student => {
+              const avg = student.ratings?.length 
+                ? (student.ratings.reduce((a, b) => a + b, 0) / student.ratings.length).toFixed(1)
+                : "0.0";
+              return (
+                <li key={`fav-${student.id}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Link to={`/student/${student.id}`}>{student.name}</Link>
+                  <span style={{ color: '#e74c3c', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    {avg} <FaHeart />
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
+
+      <h1 className="senate" style={{ marginTop: '40px' }}>Сенаторы</h1>
       <ul className="senate-list">
-        {items.map(student => (
-          <li key={student.id}>
-            <Link to={`/student/${student.id}`}>{student.name}</Link>
-          </li>
-        ))}
+        {items.map(student => {
+          const avg = student.ratings?.length 
+            ? (student.ratings.reduce((a, b) => a + b, 0) / student.ratings.length).toFixed(1)
+            : "0.0";
+          return (
+            <li key={student.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Link to={`/student/${student.id}`}>
+                {student.isFavorite && <FaStar style={{ color: '#f39c12', marginRight: '8px' }} />}
+                {student.name}
+              </Link>
+              <span style={{ color: '#e74c3c', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                {avg} <FaHeart />
+              </span>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

@@ -1,0 +1,144 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: #ffffff;
+  color: #333333;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+body.dark .modal-content {
+  background: #1e1e1e;
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: inherit;
+  transition: opacity 0.2s;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  opacity: 0.6;
+}
+
+.modal-title {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-form input {
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fff;
+  color: #333;
+  transition: border-color 0.2s;
+}
+
+.modal-form input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+body.dark .modal-form input {
+  background: #2a2a2a;
+  color: #fff;
+  border-color: #444;
+}
+
+body.dark .modal-form input:focus {
+  border-color: #4da3ff;
+}
+
+.modal-form button {
+  background: #007bff;
+  color: white;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal-form button:hover {
+  background: #0056b3;
+}
+
+body.dark .modal-form button {
+  background: #0069d9;
+}
+
+body.dark .modal-form button:hover {
+  background: #0056b3;
+}
+
+.modal-toggle {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.modal-toggle span {
+  color: #007bff;
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+body.dark .modal-toggle span {
+  color: #4da3ff;
+}
+
+.modal-toggle span:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

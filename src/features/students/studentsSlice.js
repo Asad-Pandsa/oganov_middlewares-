@@ -48,6 +48,30 @@ const studentsSlice = createSlice({
         clearSelectedMember(state) {
             state.selectedMember = null;
         },
+        toggleLike(state, action) {
+            const id = action.payload;
+            const item = state.items.find(i => i.id === id);
+            if (item) item.likes += 1;
+            if (state.selectedMember && state.selectedMember.id === id) {
+                state.selectedMember.likes += 1;
+            }
+        },
+        toggleFavorite(state, action) {
+            const id = action.payload;
+            const item = state.items.find(i => i.id === id);
+            if (item) item.isFavorite = !item.isFavorite;
+            if (state.selectedMember && state.selectedMember.id === id) {
+                state.selectedMember.isFavorite = !state.selectedMember.isFavorite;
+            }
+        },
+        addRating(state, action) {
+            const { id, rating } = action.payload;
+            const item = state.items.find(i => i.id === id);
+            if (item) item.ratings.push(rating);
+            if (state.selectedMember && state.selectedMember.id === id) {
+                state.selectedMember.ratings.push(rating);
+            }
+        }
     },
     extraReducers: (builder) => {
         builder 
@@ -57,7 +81,9 @@ const studentsSlice = createSlice({
             }) 
             .addCase(fetchSenateMembers.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.items = action.payload;
+                if (state.items.length === 0) {
+                    state.items = action.payload;
+                }
             })
             .addCase(fetchSenateMembers.rejected, (state, action) => {
                 state.status = "failed";
@@ -70,7 +96,8 @@ const studentsSlice = createSlice({
             }) 
             .addCase(fetchSenateMemberById.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.selectedMember = action.payload;
+                const localItem = state.items.find(i => i.id === action.payload.id);
+                state.selectedMember = localItem || action.payload;
             })
             .addCase(fetchSenateMemberById.rejected, (state, action) => {
                 state.status = "failed";
@@ -96,5 +123,5 @@ const studentsSlice = createSlice({
     }
 }); 
 
-export const { clearSelectedMember } = studentsSlice.actions;
+export const { clearSelectedMember, toggleLike, toggleFavorite, addRating } = studentsSlice.actions;
 export default studentsSlice.reducer;
